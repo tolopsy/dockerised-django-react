@@ -1,5 +1,19 @@
 version: "3.8"
 services:
+  db:
+    image: postgres
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres_db
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+
   app:
     build: .
     volumes:
@@ -11,12 +25,16 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
-  db:
-    image: postgres
+  
+  celery:
+    restart: always
+    build:
+      context: .
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    container_name: postgres_db
+      - .:/app
+    container_name: celery
+    command: celery -A core worker -l INFO
+    depends_on:
+      - db
+      - redis
+      - app
