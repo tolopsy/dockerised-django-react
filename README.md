@@ -1,14 +1,15 @@
 # Dockerised Django-React
 
-A modern production-effective boilerplate setup with Docker for Django & React (full-stack) projects.
+A modern production-ready boilerplate for Django & React (full-stack) projects. Setup with Docker
 
  ## Services
- - django: Backend and it's served with Gunicorn
+ - django: Backend. Served with Gunicorn
+ - react: Frontend
+ - nginx: Serves production build of the frontend and acts as reverse proxy for the backend.
  - redis: Message broker for Celery
  - celery: Asynchronous task queue
  - db: Postgres database
- - react: Frontend
- - nginx: Server for the frontend and acts as reverse proxy for the backend.
+
 
 ## Usage
 
